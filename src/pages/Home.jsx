@@ -3,16 +3,26 @@ import MovieCard from '../components/MovieCard';
 
 const Home = ({ contentData, onMovieClick, searchTerm }) => {
   
-  // Filter logic
+  // 1. Safety Check: If data hasn't arrived yet
+  if (!contentData) return null;
+
+  // 2. Filter logic based on Search Term
   const filteredContent = contentData.filter((item) =>
     item.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div>
-      {/* Only show Hero if not searching */}
-      {!searchTerm && <Hero />}
+      {/* HERO SECTION */}
+      {/* Only show Hero if NOT searching */}
+      {!searchTerm && (
+        <Hero 
+          movies={contentData.slice(0, 5)} 
+          onPlay={onMovieClick} 
+        />
+      )}
 
+      {/* MOVIE GRID */}
       <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto -mt-20 relative z-10 pb-20">
         <h2 className="text-2xl font-bold text-white mb-6 border-l-4 border-brand-gold pl-3">
           {searchTerm ? `Search Results: "${searchTerm}"` : "Filime nshya & Series"}
@@ -22,7 +32,6 @@ const Home = ({ contentData, onMovieClick, searchTerm }) => {
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-8">
             {filteredContent.map((item) => (
               <div key={item.id} onClick={() => onMovieClick(item)}>
-                {/* Mapping your data fields to the generic MovieCard props */}
                 <MovieCard movie={{
                   title: item.title,
                   image: item.poster_url, 
