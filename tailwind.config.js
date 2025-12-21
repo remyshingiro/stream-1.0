@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -7,9 +7,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'brand-dark': '#0f172a', // The deep background blue
-        'brand-gold': '#fbbf24', // The yellow/gold from your screenshots
-        'brand-gold-hover': '#d97706',
+        brand: {
+          dark: '#1a1a1a', // Or your preferred dark hex code (e.g. #0f172a)
+          gold: '#fbbf24', // This matches standard Tailwind yellow-400
+        }
       }
     },
   },
