@@ -80,6 +80,7 @@ function App() {
             content={selectedContent}
             allContent={allContent} 
             onClose={() => setSelectedContent(null)}
+            onContentChange={(newItem) => setSelectedContent(newItem)}
           />
         )}
 
