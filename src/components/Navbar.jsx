@@ -45,10 +45,7 @@ const Navbar = ({ onSearch }) => {
           <div className="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-300">
             <a href="/" className="hover:text-brand-gold transition">Ahabanza</a>
             <a href="/tv-series" className="hover:text-brand-gold transition">TV Series</a>
-            
-            {/* UPDATED LINK */}
             <a href="/seasons" className="hover:text-brand-gold transition">Categories</a>
-            
             <a href="/movies" className="hover:text-brand-gold transition">Film zose</a>
             <a href="/faq" className="hover:text-brand-gold transition">FAQs</a>
           </div>
@@ -63,7 +60,12 @@ const Navbar = ({ onSearch }) => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Shakisha filme..." 
-                className="bg-white text-black pl-3 pr-10 py-2 rounded-sm text-sm focus:outline-none w-48 focus:w-64 transition-all"
+                // 👇 FIXED LINE BELOW 👇
+                // 1. w-40: Default width
+                // 2. md:w-48: Slightly wider on tablet, but STATIC (no focus growth)
+                // 3. lg:w-48: Base width on Desktop
+                // 4. lg:focus:w-64: ONLY expands on Large Screens (Desktop)
+                className="bg-white text-black pl-3 pr-10 py-2 rounded-sm text-sm focus:outline-none w-40 md:w-48 lg:w-48 lg:focus:w-64 transition-all"
               />
               <button type="submit" className="absolute right-0 top-0 h-full px-3 bg-brand-gold text-black rounded-r-sm hover:bg-yellow-500">
                 🔍
@@ -108,10 +110,7 @@ const Navbar = ({ onSearch }) => {
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <a href="/" className="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-brand-gold hover:bg-white/5">Ahabanza</a>
             <a href="/tv-series" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-brand-gold hover:bg-white/5">TV Series</a>
-            
-            {/* UPDATED LINK */}
             <a href="/seasons" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-brand-gold hover:bg-white/5">Categories</a>
-            
             <a href="/movies" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-brand-gold hover:bg-white/5">Film zose</a>
           </div>
         </div>
