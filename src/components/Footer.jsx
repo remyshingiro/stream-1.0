@@ -1,49 +1,98 @@
+import { Link } from 'react-router-dom';
+
 const Footer = () => {
+  // REPLACE THIS WITH YOUR ACTUAL WHATSAPP GROUP LINK
+  const whatsappGroupLink = "https://chat.whatsapp.com/YOUR_GROUP_INVITE_CODE";
+
   return (
-    <footer className="bg-black text-gray-400 py-12 border-t border-gray-800">
-      <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
-        
-        {/* Column 1 */}
-        <div>
-          <h3 className="text-white font-bold text-lg mb-4">Movies</h3>
-          <ul className="space-y-2">
-            <li><a href="#" className="hover:text-brand-gold">Romantic</a></li>
-            <li><a href="#" className="hover:text-brand-gold">Action</a></li>
-            <li><a href="#" className="hover:text-brand-gold">Cartoon</a></li>
-          </ul>
+    <footer className="bg-[#050505] text-gray-400 border-t border-white/10 pt-16 pb-8 relative overflow-hidden">
+      
+      {/* Decorative gradient glow at top */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-1 bg-gradient-to-r from-transparent via-brand-gold/50 to-transparent opacity-50"></div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+          
+          {/* Column 1: Brand Identity */}
+          <div className="col-span-1 md:col-span-1">
+            <Link to="/" className="flex items-center gap-2 mb-4 group">
+              <div className="w-8 h-8 rounded-full border-2 border-red-600 flex items-center justify-center group-hover:border-red-500 transition">
+                <span className="text-red-600 font-bold text-sm group-hover:text-red-500">▶</span>
+              </div>
+              <span className="text-brand-gold font-bold text-lg tracking-wide">Agasobanuye</span>
+            </Link>
+            <p className="text-sm text-gray-500 leading-relaxed mb-4">
+              Your number one destination for translated movies and series. Entertainment made accessible for everyone.
+            </p>
+          </div>
+
+          {/* Column 2: Movies (Redirects to All Movies as requested) */}
+          <div>
+            <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-4">Browse Movies</h3>
+            <ul className="space-y-3 text-sm">
+              <li><Link to="/movies" className="hover:text-brand-gold transition-colors">Action Movies</Link></li>
+              <li><Link to="/movies" className="hover:text-brand-gold transition-colors">Romantic Drama</Link></li>
+              <li><Link to="/movies" className="hover:text-brand-gold transition-colors">Cartoons & Kids</Link></li>
+              <li><Link to="/movies" className="hover:text-brand-gold transition-colors">New Releases</Link></li>
+            </ul>
+          </div>
+
+          {/* Column 3: Quick Links */}
+          <div>
+            <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-4">Platform</h3>
+            <ul className="space-y-3 text-sm">
+              <li><Link to="/" className="hover:text-brand-gold transition-colors">Home</Link></li>
+              <li><Link to="/tv-series" className="hover:text-brand-gold transition-colors">TV Series</Link></li>
+              <li><Link to="/seasons" className="hover:text-brand-gold transition-colors">Categories</Link></li>
+              <li><Link to="/movies" className="hover:text-brand-gold transition-colors">Film zose</Link></li>
+            </ul>
+          </div>
+
+          {/* Column 4: Community */}
+          <div>
+            <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-4">Join Community</h3>
+            <p className="text-sm text-gray-500 mb-4">
+              Join our WhatsApp group to get updates on the latest releases and request movies.
+            </p>
+            <a 
+              href={whatsappGroupLink}
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-green-400 hover:text-green-300 font-bold text-sm transition-colors"
+            >
+              <span>Join WhatsApp Group</span>
+              <span>→</span>
+            </a>
+          </div>
         </div>
 
-        {/* Column 2 */}
-        <div>
-          <h3 className="text-white font-bold text-lg mb-4">About</h3>
-          <ul className="space-y-2">
-            <li><a href="#" className="hover:text-brand-gold">Company</a></li>
-            <li><a href="#" className="hover:text-brand-gold">Team</a></li>
-            <li><a href="#" className="hover:text-brand-gold">Legacy</a></li>
-          </ul>
-        </div>
-
-        {/* Column 3 */}
-        <div>
-          <h3 className="text-white font-bold text-lg mb-4">Services</h3>
-          <ul className="space-y-2">
-            <li><a href="#" className="hover:text-brand-gold">Movies</a></li>
-            <li><a href="#" className="hover:text-brand-gold">Series</a></li>
-            <li><a href="#" className="hover:text-brand-gold">Kids/cartoon</a></li>
-          </ul>
+        <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-gray-600 text-center md:text-left">
+            © 2025 AgasobanuyeFilms. All rights reserved.
+          </p>
+          <div className="flex gap-6 text-xs text-gray-600">
+            <a href="#" className="hover:text-gray-400">Privacy Policy</a>
+            <a href="#" className="hover:text-gray-400">Terms of Service</a>
+          </div>
         </div>
       </div>
 
-      <div className="text-center mt-12 text-xs text-gray-600">
-        ©2025 VONSUNG
-      </div>
-
-      {/* WhatsApp Floating Button */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <button className="bg-green-500 p-3 rounded-full shadow-lg hover:scale-110 transition text-white font-bold">
-          WA
+      {/* --- FLOATING WHATSAPP BUTTON --- */}
+      <a 
+        href={whatsappGroupLink}
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-50 group"
+        aria-label="Join WhatsApp Group"
+      >
+        <span className="absolute -inset-2 rounded-full bg-green-500 opacity-20 group-hover:opacity-40 animate-pulse"></span>
+        <button className="relative bg-[#25D366] hover:bg-[#20bd5a] p-3.5 rounded-full shadow-xl hover:scale-110 transition-all duration-300 flex items-center justify-center">
+          {/* WhatsApp SVG Icon */}
+          <svg className="w-8 h-8 text-white fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+          </svg>
         </button>
-      </div>
+      </a>
     </footer>
   );
 };
