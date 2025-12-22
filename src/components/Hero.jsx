@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react';
 
-// FIX 1: Add " = []" after movies to prevent the 'undefined' crash
 const Hero = ({ movies = [], onPlay }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
+  // 1. Helper: Find the correct download link (checks all possible names)
+  const getDownloadLink = (item) => {
+    if (!item) return null;
+    return item.download_url || item.downloadUrl || item.link || item.url || item.file || null;
+  };
+
   // Automatic Slide Logic
   useEffect(() => {
-    // Safety check: Don't start timer if no movies
     if (!movies || movies.length === 0) return;
 
     const interval = setInterval(() => {
@@ -15,21 +19,22 @@ const Hero = ({ movies = [], onPlay }) => {
       setTimeout(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % movies.length);
         setIsAnimating(false);
-      }, 500);
-    }, 5000);
+      }, 500); // 500ms transition time matches CSS duration
+    }, 5000); // Change slide every 5 seconds
 
     return () => clearInterval(interval);
-    
-    // FIX 2: Depend on the movies array itself, not length, to avoid errors
   }, [movies]); 
 
-  // If no movies exist yet, show nothing (instead of crashing)
+  // If no movies exist yet, show nothing
   if (!movies || movies.length === 0) return null;
 
   const currentMovie = movies[currentIndex];
 
-  // Extra safety: ensure currentMovie exists before trying to render
+  // Safety check
   if (!currentMovie) return null;
+
+  // Get the download link for the CURRENT slide
+  const downloadUrl = getDownloadLink(currentMovie);
 
   return (
     <div className="relative h-[85vh] w-full overflow-hidden group">
@@ -37,12 +42,13 @@ const Hero = ({ movies = [], onPlay }) => {
       {/* BACKGROUND IMAGE */}
       <div className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${isAnimating ? 'opacity-0' : 'opacity-100'}`}>
         <img 
-          src={currentMovie.poster_url} 
-          className="h-full w-full object-cover" 
+          src={currentMovie.poster_url || currentMovie.image} 
+          className="h-full w-full object-cover transition-transform duration-[10000ms] ease-linear transform scale-100 group-hover:scale-110" 
           alt={currentMovie.title}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-brand-dark/40 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-dark via-brand-dark/20 to-transparent" />
+        {/* Gradients for readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/20 to-transparent" />
       </div>
 
       {/* CONTENT */}
@@ -53,27 +59,46 @@ const Hero = ({ movies = [], onPlay }) => {
             #{currentIndex + 1} Trending
           </span>
           
-          <h1 className="text-5xl md:text-7xl font-extrabold mb-4 leading-tight text-white drop-shadow-2xl">
+          <h1 className="text-4xl md:text-7xl font-extrabold mb-4 leading-tight text-white drop-shadow-2xl">
             {currentMovie.title}
           </h1>
           
-          <p className="text-lg text-gray-200 mb-8 line-clamp-3 max-w-xl drop-shadow-md">
+          <p className="text-base md:text-lg text-gray-200 mb-8 line-clamp-3 max-w-xl drop-shadow-md">
             {currentMovie.description || "Ntucikwe na filime nziza cyane zigezweho. Reba ubu nonaha kuri Agasobanuye Films."}
           </p>
           
           <div className="flex flex-wrap gap-4">
+            
+            {/* 1. REBA UBU (Functional) */}
             <button 
               onClick={() => onPlay(currentMovie)}
               className="bg-brand-gold hover:bg-yellow-500 text-black px-8 py-3.5 rounded-sm font-bold transition transform hover:scale-105 flex items-center gap-3 shadow-lg hover:shadow-yellow-500/20"
             >
               <span className="text-xl">▶</span> 
-              <span>REBA UBU</span>
+              <span>REBA FILIME</span>
             </button>
 
-            <button className="bg-white/10 backdrop-blur-md border border-white/30 text-white px-8 py-3.5 rounded-sm font-bold hover:bg-white/20 transition flex items-center gap-3">
-              <span className="text-xl">+</span> 
-              <span>URUTONDE</span>
-            </button>
+            {/* 2. DOWNLOAD (Functional Link) */}
+            <a 
+              href={downloadUrl || "#"}
+              target={downloadUrl ? "_blank" : "_self"}
+              onClick={(e) => {
+                if (!downloadUrl) {
+                  e.preventDefault();
+                  alert("Download link not available yet.");
+                }
+              }}
+              className={`
+                px-8 py-3.5 rounded-sm font-bold flex items-center gap-3 border transition-all
+                ${downloadUrl 
+                  ? "bg-white/10 backdrop-blur-md border-white/30 text-white hover:bg-white hover:text-black hover:border-white" 
+                  : "bg-gray-800/50 border-gray-700 text-gray-400 cursor-not-allowed"
+                }
+              `}
+            >
+              <span className="text-xl text-lg font-bold">⬇</span> 
+              <span>DOWNLOAD</span>
+            </a>
           </div>
 
         </div>

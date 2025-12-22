@@ -30,10 +30,10 @@ const Footer = () => {
           <div>
             <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-4">Browse Movies</h3>
             <ul className="space-y-3 text-sm">
-              <li><Link to="/movies" className="hover:text-brand-gold transition-colors">Action Movies</Link></li>
-              <li><Link to="/movies" className="hover:text-brand-gold transition-colors">Romantic Drama</Link></li>
-              <li><Link to="/movies" className="hover:text-brand-gold transition-colors">Cartoons & Kids</Link></li>
-              <li><Link to="/movies" className="hover:text-brand-gold transition-colors">New Releases</Link></li>
+              <li><Link to="/" className="hover:text-brand-gold transition-colors">Action Movies</Link></li>
+              <li><Link to="/" className="hover:text-brand-gold transition-colors">Romantic Drama</Link></li>
+              <li><Link to="/" className="hover:text-brand-gold transition-colors">Cartoons & Kids</Link></li>
+              <li><Link to="/" className="hover:text-brand-gold transition-colors">New Releases</Link></li>
             </ul>
           </div>
 
@@ -42,9 +42,9 @@ const Footer = () => {
             <h3 className="text-white font-bold text-sm uppercase tracking-wider mb-4">Platform</h3>
             <ul className="space-y-3 text-sm">
               <li><Link to="/" className="hover:text-brand-gold transition-colors">Home</Link></li>
-              <li><Link to="/tv-series" className="hover:text-brand-gold transition-colors">TV Series</Link></li>
+              <li><Link to="/seasons" className="hover:text-brand-gold transition-colors">TV Series</Link></li>
               <li><Link to="/seasons" className="hover:text-brand-gold transition-colors">Categories</Link></li>
-              <li><Link to="/movies" className="hover:text-brand-gold transition-colors">Film zose</Link></li>
+              <li><Link to="/" className="hover:text-brand-gold transition-colors">Film zose</Link></li>
             </ul>
           </div>
 
@@ -68,7 +68,7 @@ const Footer = () => {
 
         <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-gray-600 text-center md:text-left">
-            © 2025 AgasobanuyeFilms. All rights reserved.
+            © 2022 AgasobanuyeFilm. All rights reserved.
           </p>
           <div className="flex gap-6 text-xs text-gray-600">
             <a href="#" className="hover:text-gray-400">Privacy Policy</a>

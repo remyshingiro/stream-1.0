@@ -37,17 +37,16 @@ const Navbar = ({ onSearch }) => {
             </div>
             <div className="flex flex-col">
               <span className="text-brand-gold font-bold text-xl leading-none">Agasobanuye</span>
-              <span className="text-white text-xs tracking-widest">FILMS</span>
+              <span className="text-white text-xs tracking-widest">FILM</span>
             </div>
           </a>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-300">
             <a href="/" className="hover:text-brand-gold transition">Ahabanza</a>
-            <a href="/tv-series" className="hover:text-brand-gold transition">TV Series</a>
+            <a href="/seasons" className="hover:text-brand-gold transition">TV Series</a>
             <a href="/seasons" className="hover:text-brand-gold transition">Categories</a>
-            <a href="/movies" className="hover:text-brand-gold transition">Film zose</a>
-            <a href="/faq" className="hover:text-brand-gold transition">FAQs</a>
+            <a href="/" className="hover:text-brand-gold transition">Film zose</a>
           </div>
 
           {/* Right Side: Search & Menu Toggle */}
