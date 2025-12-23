@@ -1,5 +1,6 @@
 import Hero from '../components/Hero';
 import MovieCard from '../components/MovieCard';
+import SEO from '../components/SEO';
 
 const Home = ({ contentData, onMovieClick, searchTerm }) => {
   

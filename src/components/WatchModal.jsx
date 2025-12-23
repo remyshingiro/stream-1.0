@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import SEO from './SEO'; // <--- 1. Imported SEO
 
 const WatchModal = ({ content, allContent, onClose, onContentChange }) => {
   const [currentEpisode, setCurrentEpisode] = useState(null);
@@ -40,6 +41,13 @@ const WatchModal = ({ content, allContent, onClose, onContentChange }) => {
     // OUTER WRAPPER
     <div className="fixed inset-0 z-[100] bg-black flex items-center justify-center p-0 md:p-4">
       
+      {/* 2. Added SEO Component Here */}
+      <SEO 
+        key={content.id}
+        title={content.title} 
+        description={content.description || `Watch ${content.title} on StreamIt.`} 
+      />
+
       {/* MAIN CONTAINER */}
       <div className="w-full max-w-7xl h-full md:h-[90vh] bg-[#121212] md:rounded-xl shadow-2xl flex flex-col overflow-hidden border-none md:border border-white/10">
         
@@ -86,11 +94,7 @@ const WatchModal = ({ content, allContent, onClose, onContentChange }) => {
           {/* LEFT SIDE: VIDEO PLAYER */}
           <div className="w-full md:flex-1 flex flex-col bg-black md:overflow-y-auto shrink-0">
             
-            {/* VIDEO CONTAINER:
-               - Mobile: h-[65vh] (65% screen height)
-               - Medium (Tablet): md:flex-1 (Fills remaining height - THEATER MODE)
-               - Large (Desktop): lg:flex-none lg:aspect-video (Returns to 16:9 to fit description)
-            */}
+            {/* VIDEO CONTAINER */}
             <div className="w-full h-[65vh] md:h-auto md:flex-1 lg:flex-none lg:aspect-video bg-black flex items-center justify-center flex-shrink-0">
                {activeVideoUrl ? (
                 <iframe 
