@@ -1,19 +1,42 @@
-import { useState, useMemo } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom'; // 1. Import Router components
-import { staticMovies } from './data/staticMovies'; 
-import { staticSeries } from './data/staticSeries'; 
+import { useState, useEffect, useMemo } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+// 1. IMPORT SERVICES & NEW PAGES
+import { fetchAllData } from './services/githubService'; // The Bridge
+import AdminPanel from './components/AdminPanel';        // The Dashboard
+
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import WatchModal from './components/WatchModal';
 
 function App() {
-  // 1. SMART DATA MERGE: Renames duplicates instead of deleting them
+  // 2. STATE: Instead of static files, we start with an empty list
+  const [fetchedData, setFetchedData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // UI States
+  const [selectedContent, setSelectedContent] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // 3. EFFECT: Load data from GitHub on startup
+  useEffect(() => {
+    const loadContent = async () => {
+      const data = await fetchAllData();
+      setFetchedData(data);
+      setIsLoading(false);
+    };
+    loadContent();
+  }, []);
+
+  // 4. SMART DATA MERGE: Renames duplicates (Applied to fetched data)
   const allContent = useMemo(() => {
-    const rawList = [...staticMovies, ...staticSeries];
+    // If we are still loading, return empty
+    if (fetchedData.length === 0) return [];
+
     const seenIds = new Set();
     
-    return rawList.map((item) => {
+    return fetchedData.map((item) => {
       let uniqueId = item.id;
       let counter = 1;
 
@@ -27,60 +50,81 @@ function App() {
       seenIds.add(uniqueId);
       return { ...item, id: uniqueId };
     });
-  }, []);
+  }, [fetchedData]); // Re-run this only when fetchedData changes
 
-  // 2. State Management
-  const [selectedContent, setSelectedContent] = useState(null); 
-  const [searchTerm, setSearchTerm] = useState(""); 
+  // 5. HELPER: Filter for Series Page
+  // We filter the 'allContent' list dynamically
+  const seriesContent = useMemo(() => {
+    return allContent.filter(item => 
+      item.type === 'series' || item.category === 'Series'
+    );
+  }, [allContent]);
+
+  // Loading Screen
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-brand-dark flex flex-col items-center justify-center text-white">
+        <div className="w-16 h-16 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p className="animate-pulse">Loading Library...</p>
+      </div>
+    );
+  }
 
   return (
-    // 3. Wrap everything in BrowserRouter
     <BrowserRouter>
       <div className="min-h-screen bg-brand-dark font-sans relative">
+        {/* Pass the search setter to Navbar */}
         <Navbar onSearch={setSearchTerm} />
 
         {/* --- PAGE CONTENT (Hidden if watching a video) --- */}
         <div className={selectedContent ? "hidden" : "block"}>
           
-          {/* 4. Define Your Routes Here */}
           <Routes>
             
-            {/* Route 1: Home Page - Shows ALL content (Movies + Series) */}
+            {/* Route 1: Home Page - Shows ALL content */}
             <Route 
               path="/" 
               element={
                 <Home 
                   contentData={allContent} 
                   searchTerm={searchTerm} 
-                  onMovieClick={(item) => setSelectedContent(item)} 
+                  onMovieClick={setSelectedContent} 
                 />
               } 
             />
 
-            {/* Route 2: Categories/Seasons - Reuses Home but ONLY shows staticSeries */}
+            {/* Route 2: Categories/Seasons - Shows ONLY Series */}
             <Route 
               path="/seasons" 
               element={
                 <Home 
-                  contentData={staticSeries} // <--- Only passing series data here
+                  contentData={seriesContent} 
                   searchTerm={searchTerm} 
-                  onMovieClick={(item) => setSelectedContent(item)} 
+                  onMovieClick={setSelectedContent} 
                 />
               } 
             />
 
-            {/* You can add more routes here later (e.g. path="/movies") */}
+            {/* 👇 NEW Route 3: Admin Panel */}
+            <Route 
+              path="/admin" 
+              element={
+                <AdminPanel 
+                  movies={allContent} // Pass current list for preview
+                />
+              } 
+            />
 
           </Routes>
         </div>
 
-        {/* --- WATCH MODAL (Outside Routes so it overlays everything) --- */}
+        {/* --- WATCH MODAL --- */}
         {selectedContent && (
           <WatchModal 
             content={selectedContent}
             allContent={allContent} 
             onClose={() => setSelectedContent(null)}
-            onContentChange={(newItem) => setSelectedContent(newItem)}
+            onContentChange={setSelectedContent}
           />
         )}
 
