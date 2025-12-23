@@ -1,14 +1,17 @@
 import { useState, useEffect, useMemo } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-// 1. IMPORT SERVICES & NEW PAGES
-import { fetchAllData } from './services/githubService'; // The Bridge
-import AdminPanel from './components/AdminPanel';        // The Dashboard
-
+// 1. IMPORT SERVICES & PAGES
+import { fetchAllData } from './services/githubService'; 
+import AdminPanel from './components/AdminPanel';        
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import WatchModal from './components/WatchModal';
+
+// --- NEW IMPORTS ---
+import Login from './components/Login';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   // 2. STATE: Instead of static files, we start with an empty list
@@ -53,7 +56,6 @@ function App() {
   }, [fetchedData]); // Re-run this only when fetchedData changes
 
   // 5. HELPER: Filter for Series Page
-  // We filter the 'allContent' list dynamically
   const seriesContent = useMemo(() => {
     return allContent.filter(item => 
       item.type === 'series' || item.category === 'Series'
@@ -63,16 +65,16 @@ function App() {
   // Loading Screen
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-brand-dark flex flex-col items-center justify-center text-white">
-        <div className="w-16 h-16 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p className="animate-pulse">Loading Library...</p>
+      <div className="min-h-screen bg-[#0f0f0f] flex flex-col items-center justify-center text-white">
+        <div className="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+        <p className="animate-pulse text-gray-400">Loading Library...</p>
       </div>
     );
   }
 
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-brand-dark font-sans relative">
+      <div className="min-h-screen bg-[#0f0f0f] font-sans relative">
         {/* Pass the search setter to Navbar */}
         <Navbar onSearch={setSearchTerm} />
 
@@ -105,13 +107,16 @@ function App() {
               } 
             />
 
-            {/* 👇 NEW Route 3: Admin Panel */}
+            {/* 👇 NEW Route 3: Login Page */}
+            <Route path="/login" element={<Login />} />
+
+            {/* 👇 UPDATED Route 4: Protected Admin Panel */}
             <Route 
               path="/admin" 
               element={
-                <AdminPanel 
-                  movies={allContent} // Pass current list for preview
-                />
+                <ProtectedRoute>
+                  <AdminPanel movies={allContent} />
+                </ProtectedRoute>
               } 
             />
 

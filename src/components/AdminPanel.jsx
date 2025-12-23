@@ -2,10 +2,8 @@ import { useState, useMemo } from 'react';
 import { saveOrUpdateContent, deleteContent } from '../services/githubService';
 
 // --- CONFIGURATION ---
-// 1. REPLACE WITH YOUR CLOUD NAME
-const CLOUDINARY_CLOUD_NAME = "YOUR_CLOUD_NAME_HERE"; 
-// 2. REPLACE WITH YOUR UPLOAD PRESET (Must be 'Unsigned')
-const CLOUDINARY_PRESET = "YOUR_UPLOAD_PRESET_HERE"; 
+const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+const CLOUDINARY_PRESET = import.meta.env.VITE_CLOUDINARY_PRESET;
 
 const AdminPanel = ({ movies }) => {
   const [isSaving, setIsSaving] = useState(false);
