@@ -13,6 +13,7 @@ import WatchModal from './components/WatchModal';
 // --- NEW IMPORTS ---
 import Login from './components/Login';
 import ProtectedRoute from './components/ProtectedRoute';
+import SkeletonLoader from './components/SkeletonLoader';
 
 function App() {
   // 2. STATE: Instead of static files, we start with an empty list
@@ -64,13 +65,8 @@ function App() {
   }, [allContent]);
 
   // Loading Screen
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-[#0f0f0f] flex flex-col items-center justify-center text-white">
-        <div className="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p className="animate-pulse text-gray-400">Loading Library...</p>
-      </div>
-    );
+if (isLoading) {
+    return <SkeletonLoader />;
   }
 
   return (
