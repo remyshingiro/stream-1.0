@@ -1,4 +1,3 @@
-// CONFIGURATION: Now loaded securely from .env file
 const GITHUB_USERNAME = import.meta.env.VITE_GITHUB_USERNAME;
 const REPO_NAME = import.meta.env.VITE_GITHUB_REPO;
 const BRANCH = import.meta.env.VITE_GITHUB_BRANCH;
@@ -10,13 +9,8 @@ const BASE_URL = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/c
 const toBase64 = (str) => btoa(unescape(encodeURIComponent(str)));
 const fromBase64 = (str) => decodeURIComponent(escape(atob(str)));
 
-// 1. FETCH ALL MOVIES & SERIES
+// 1. FETCH ALL DATA
 export const fetchAllData = async () => {
-  if (!TOKEN) {
-    console.error("❌ Missing GitHub Token. Check your .env file.");
-    return [];
-  }
-
   try {
     const [moviesReq, seriesReq] = await Promise.all([
       fetch(`https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/${BRANCH}/movies.json`),
@@ -26,7 +20,7 @@ export const fetchAllData = async () => {
     const movies = moviesReq.ok ? await moviesReq.json() : [];
     const series = seriesReq.ok ? await seriesReq.json() : [];
 
-    // Tag them so the app knows which is which
+    // Tag them properly
     const moviesWithType = movies.map(m => ({ ...m, type: 'movie' }));
     const seriesWithType = series.map(s => ({ ...s, type: 'series' }));
 
@@ -37,57 +31,86 @@ export const fetchAllData = async () => {
   }
 };
 
-// 2. SAVE NEW CONTENT
-export const saveContent = async (newContentItem) => {
-  if (!TOKEN) {
-    alert("❌ Error: GitHub Token is missing in .env file");
+// 2. GENERIC WRITE FUNCTION (Handles Add, Edit, Delete)
+const writeToGitHub = async (filename, content, message) => {
+  const url = `${BASE_URL}/${filename}`;
+  
+  // A. Get current SHA
+  const getResponse = await fetch(url, {
+    headers: { 
+      Authorization: `Bearer ${TOKEN}`,
+      "X-GitHub-Api-Version": "2022-11-28"
+    }
+  });
+  
+  if (!getResponse.ok) throw new Error("Failed to connect to GitHub");
+  const fileData = await getResponse.json();
+
+  // B. Write new data
+  const putResponse = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Authorization": `Bearer ${TOKEN}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      message: message,
+      content: toBase64(JSON.stringify(content, null, 2)),
+      sha: fileData.sha 
+    }),
+  });
+
+  if (!putResponse.ok) throw new Error("GitHub update failed");
+  return true;
+};
+// 3. ADD OR UPDATE ITEM
+export const saveOrUpdateContent = async (item, isEdit = false) => {
+  try {
+    // Determine file based on type OR category if type is missing
+    const isSeries = item.type === 'series' || item.category === 'Series';
+    const filename = isSeries ? "series.json" : "movies.json";
+    
+    // Fetch current list first to ensure we have latest data
+    const req = await fetch(`https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/${BRANCH}/${filename}`);
+    let currentList = await req.json();
+
+    if (isEdit) {
+      // Find index and update
+      const index = currentList.findIndex(i => i.id === item.id);
+      if (index !== -1) {
+        currentList[index] = item;
+      }
+    } else {
+      // Add to top
+      currentList = [item, ...currentList];
+    }
+
+    await writeToGitHub(filename, currentList, `${isEdit ? 'Update' : 'Add'} ${item.title}`);
+    return true;
+  } catch (error) {
+    console.error(error);
     return false;
   }
+};
 
-  // Decide which file to update based on the type
-  const isSeries = newContentItem.type === 'series' || newContentItem.category === 'Series';
-  const fileName = isSeries ? "series.json" : "movies.json";
-  const url = `${BASE_URL}/${fileName}`;
-
+// 4. DELETE ITEM
+export const deleteContent = async (item) => {
   try {
-    // A. Get current file data (we need the 'sha' ID to update it)
-    const getResponse = await fetch(url, {
-      headers: { 
-        Authorization: `Bearer ${TOKEN}`,
-        "X-GitHub-Api-Version": "2022-11-28"
-      }
-    });
-    
-    if (!getResponse.ok) throw new Error("Failed to fetch file info from GitHub");
-    
-    const fileData = await getResponse.json();
-    
-    // B. Decode existing list
-    const currentContent = JSON.parse(fromBase64(fileData.content));
-    
-    // C. Add new item to the TOP of the list
-    const updatedContent = [newContentItem, ...currentContent];
+    const isSeries = item.type === 'series' || item.category === 'Series';
+    const filename = isSeries ? "series.json" : "movies.json";
 
-    // D. Upload the updated list
-    const putResponse = await fetch(url, {
-      method: "PUT",
-      headers: {
-        "Authorization": `Bearer ${TOKEN}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        message: `Add new ${isSeries ? 'Series' : 'Movie'}: ${newContentItem.title}`,
-        content: toBase64(JSON.stringify(updatedContent, null, 2)),
-        sha: fileData.sha 
-      }),
-    });
+    // 1. Fetch latest data
+    const req = await fetch(`https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/${BRANCH}/${filename}`);
+    const currentList = await req.json();
 
-    if (!putResponse.ok) throw new Error("GitHub update failed");
+    // 2. Filter out the item to delete
+    const updatedList = currentList.filter(i => i.id !== item.id);
+
+    // 3. Save new list back to GitHub
+    await writeToGitHub(filename, updatedList, `Delete ${item.title}`);
     return true;
-
   } catch (error) {
-    console.error("Save failed:", error);
-    alert(`Error: ${error.message}`);
+    console.error("Delete failed:", error);
     return false;
   }
 };
