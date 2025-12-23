@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 
 // 1. IMPORT SERVICES & PAGES
 import { fetchAllData } from './services/githubService'; 
@@ -75,6 +76,7 @@ function App() {
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-[#0f0f0f] font-sans relative">
+        <Toaster position="bottom-right" reverseOrder={false} />
         {/* Pass the search setter to Navbar */}
         <Navbar onSearch={setSearchTerm} />
 
