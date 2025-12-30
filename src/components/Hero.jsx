@@ -96,7 +96,7 @@ const Hero = ({ movies = [], onPlay }) => {
                 }
               `}
             >
-              <span className="text-xl text-lg font-bold">⬇</span> 
+              <span className="text-xl font-bold">⬇</span> 
               <span>DOWNLOAD</span>
             </a>
           </div>
