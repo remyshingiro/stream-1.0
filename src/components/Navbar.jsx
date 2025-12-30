@@ -37,14 +37,14 @@ const Navbar = ({ onSearch }) => {
             </div>
             <div className="flex flex-col">
               <span className="text-brand-gold font-bold text-xl leading-none">Agasobanuye</span>
-              <span className="text-white text-xs tracking-widest">FILM</span>
+              <span className="text-white text-xs tracking-widest">FILIME</span>
             </div>
           </a>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6 text-sm font-medium text-gray-300">
             <a href="/" className="hover:text-brand-gold transition">Ahabanza</a>
-            <a href="/seasons" className="hover:text-brand-gold transition">TV Series</a>
+            <a href="/seasons" className="hover:text-brand-gold transition">Action</a>
             <a href="/seasons" className="hover:text-brand-gold transition">Categories</a>
             <a href="/" className="hover:text-brand-gold transition">Film zose</a>
           </div>
@@ -108,9 +108,9 @@ const Navbar = ({ onSearch }) => {
         <div className="md:hidden bg-brand-dark border-t border-white/10">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             <a href="/" className="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-brand-gold hover:bg-white/5">Ahabanza</a>
-            <a href="/tv-series" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-brand-gold hover:bg-white/5">TV Series</a>
+            <a href="/seasons" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-brand-gold hover:bg-white/5">Action</a>
             <a href="/seasons" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-brand-gold hover:bg-white/5">Categories</a>
-            <a href="/movies" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-brand-gold hover:bg-white/5">Film zose</a>
+            <a href="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-brand-gold hover:bg-white/5">Film zose</a>
           </div>
         </div>
       )}

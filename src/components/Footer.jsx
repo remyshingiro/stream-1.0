@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   // REPLACE THIS WITH YOUR ACTUAL WHATSAPP GROUP LINK
-  const whatsappGroupLink = "https://chat.whatsapp.com/YOUR_GROUP_INVITE_CODE";
+  const whatsappGroupLink = "https://chat.whatsapp.com/BezV8sO4UeG6XvXI5fWo7D";
 
   return (
     <footer className="bg-[#050505] text-gray-400 border-t border-white/10 pt-16 pb-8 relative overflow-hidden">
@@ -68,7 +68,7 @@ const Footer = () => {
 
         <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-gray-600 text-center md:text-left">
-            © 2022 AgasobanuyeFilm. All rights reserved.
+            © 2022 AgasobanuyeFilime. All rights reserved.
           </p>
           <div className="flex gap-6 text-xs text-gray-600">
             <a href="#" className="hover:text-gray-400">Privacy Policy</a>
