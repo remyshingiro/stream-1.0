@@ -1,6 +1,75 @@
+// import Hero from '../components/Hero';
+// import MovieCard from '../components/MovieCard';
+// import SEO from '../components/SEO';
+// import useStructuredData from '../hooks/useStructuredData';
+
+// const Home = ({ contentData, onMovieClick, searchTerm }) => {
+
+//   // Tell Google this is a search engine/streaming site
+//   useStructuredData({
+//     "@context": "https://schema.org",
+//     "@type": "WebSite",
+//     "name": "Agasobanuye Filime",
+//     "url": "https://agasobanuyefilime.com/",
+//     "potentialAction": {
+//       "@type": "SearchAction",
+//       "target": "https://agasobanuyefilime.com/search?q={search_term_string}",
+//       "query-input": "required name=search_term_string"
+//     }
+//   });
+  
+//   // 1. Safety Check: If data hasn't arrived yet
+//   if (!contentData) return null;
+
+//   // 2. Filter logic based on Search Term
+//   const filteredContent = contentData.filter((item) =>
+//     item.title.toLowerCase().includes(searchTerm.toLowerCase())
+//   );
+
+//   return (
+//     <div>
+//       {/* HERO SECTION */}
+//       {/* Only show Hero if NOT searching */}
+//       {!searchTerm && (
+//         <Hero 
+//           movies={contentData.slice(0, 5)} 
+//           onPlay={onMovieClick} 
+//         />
+//       )}
+
+//       {/* MOVIE GRID */}
+//       <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto -mt-20 relative z-10 pb-20">
+//         <h2 className="text-2xl font-bold text-white mb-6 border-l-4 border-brand-gold pl-3">
+//           {searchTerm ? `Search Results: "${searchTerm}"` : "Filime nshya & Series"}
+//         </h2>
+
+//         {filteredContent.length > 0 ? (
+//           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-8">
+//             {filteredContent.map((item) => (
+//               <div key={item.id} onClick={() => onMovieClick(item)}>
+//                 <MovieCard movie={{
+//                   title: item.title,
+//                   image: item.poster_url, 
+//                   category: item.type === 'series' ? 'Series' : 'Movie',
+//                   year: '2025' 
+//                 }} />
+//               </div>
+//             ))}
+//           </div>
+//         ) : (
+//           <div className="text-center text-gray-500 py-20">No movies found.</div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Home;
+
+
+import { Link } from 'react-router-dom'; // <--- 1. Import Link
 import Hero from '../components/Hero';
 import MovieCard from '../components/MovieCard';
-import SEO from '../components/SEO';
 import useStructuredData from '../hooks/useStructuredData';
 
 const Home = ({ contentData, onMovieClick, searchTerm }) => {
@@ -18,10 +87,10 @@ const Home = ({ contentData, onMovieClick, searchTerm }) => {
     }
   });
   
-  // 1. Safety Check: If data hasn't arrived yet
+  // Safety Check
   if (!contentData) return null;
 
-  // 2. Filter logic based on Search Term
+  // Filter logic
   const filteredContent = contentData.filter((item) =>
     item.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -29,7 +98,6 @@ const Home = ({ contentData, onMovieClick, searchTerm }) => {
   return (
     <div>
       {/* HERO SECTION */}
-      {/* Only show Hero if NOT searching */}
       {!searchTerm && (
         <Hero 
           movies={contentData.slice(0, 5)} 
@@ -46,14 +114,18 @@ const Home = ({ contentData, onMovieClick, searchTerm }) => {
         {filteredContent.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-8">
             {filteredContent.map((item) => (
-              <div key={item.id} onClick={() => onMovieClick(item)}>
+              /* --- 2. SEO FIX: Use Link instead of div onClick --- */
+              <Link key={item.id} to={`/watch/${item.id}`} className="block">
+                
                 <MovieCard movie={{
                   title: item.title,
                   image: item.poster_url, 
                   category: item.type === 'series' ? 'Series' : 'Movie',
-                  year: '2025' 
+                  year: '2025',
+                  interpreter_name: item.interpreter_name // <--- Added this so the yellow badge works!
                 }} />
-              </div>
+                
+              </Link>
             ))}
           </div>
         ) : (

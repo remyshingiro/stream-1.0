@@ -9,6 +9,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import WatchModal from './components/WatchModal';
+import WatchPage from './pages/WatchPage';
 
 // --- NEW IMPORTS ---
 import Login from './components/Login';
@@ -104,6 +105,7 @@ if (isLoading) {
                 />
               } 
             />
+            <Route path="/watch/:id" element={<WatchPage allMovies={allContent} />} />
 
             {/* 👇 NEW Route 3: Login Page */}
             <Route path="/login" element={<Login />} />
