@@ -1,8 +1,22 @@
 import Hero from '../components/Hero';
 import MovieCard from '../components/MovieCard';
 import SEO from '../components/SEO';
+import useStructuredData from '../hooks/useStructuredData';
 
 const Home = ({ contentData, onMovieClick, searchTerm }) => {
+
+  // Tell Google this is a search engine/streaming site
+  useStructuredData({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Agasobanuye Filime",
+    "url": "https://agasobanuyefilime.com/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://agasobanuyefilime.com/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  });
   
   // 1. Safety Check: If data hasn't arrived yet
   if (!contentData) return null;
